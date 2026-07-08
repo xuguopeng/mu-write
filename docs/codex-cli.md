@@ -32,6 +32,77 @@ plotforge-cli call --project /path/to/novel <channel> '[json-array-args]'
 
 ## 常用示例
 
+### 短命令
+
+查看最近项目：
+
+```bash
+plotforge-cli project recent
+```
+
+查看每个项目的蓝图、草稿、定稿进度：
+
+```bash
+plotforge-cli project status
+```
+
+创建项目：
+
+```bash
+plotforge-cli project new "测试小说" \
+  --dir "/Users/xuguopeng/Documents/徐徐如声/徐徐如声/创作库/小说" \
+  --genre "都市" \
+  --audience "男频读者"
+```
+
+创建章节蓝图：
+
+```bash
+plotforge-cli chapter blueprint \
+  --project "/path/to/novel" \
+  --number 1 \
+  --title "第一章" \
+  --role "开篇" \
+  --purpose "建立主角困境" \
+  --events "主角准备修路，全村阻拦"
+```
+
+手动保存章节草稿：
+
+```bash
+plotforge-cli chapter draft \
+  --project "/path/to/novel" \
+  --number 1 \
+  --content "这里是第一章正文。"
+```
+
+预览 AI 自动写下一章会使用的章节号、版本和提示词，不调用模型：
+
+```bash
+plotforge-cli chapter next --project "/path/to/novel" --dry-run
+```
+
+让 AI 自动写指定章节并保存为草稿：
+
+```bash
+plotforge-cli chapter write \
+  --project "/path/to/novel" \
+  --number 78 \
+  --guidance "节奏紧一点，结尾留下强钩子"
+```
+
+让 AI 自动判断下一章并保存为草稿：
+
+```bash
+plotforge-cli chapter next \
+  --project "/path/to/novel" \
+  --guidance "承接上一章，不要跳时间线"
+```
+
+`chapter write` 和 `chapter next` 会读取项目设定、章节蓝图、角色状态、上一章结尾和后续蓝图参考，然后调用默认模型生成正文。可以用 `--model <model-id>` 指定模型，用 `--temperature` 和 `--max-tokens` 调整生成参数。
+
+### 底层通道
+
 读取全局配置：
 
 ```bash
