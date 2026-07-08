@@ -1,0 +1,34 @@
+[package]
+name = "plotforge"
+version = "1.0.0"
+description = "为网文作者打造的 AI 连载生产工作台"
+authors = ["PlotForge Team"]
+edition = "2021"
+
+[lib]
+name = "ai_novel_generator_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+tauri-plugin-shell = "2"
+tauri-plugin-fs = "2"
+tauri-plugin-sql = { version = "2", features = ["sqlite"] }
+tauri-plugin-dialog = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+reqwest = { version = "0.12", features = ["json", "stream"] }
+tokio = { version = "1", features = ["full"] }
+futures-util = "0.3"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+anyhow = "1"
+thiserror = "2"
+rusqlite = { version = "0.32", features = ["bundled"] }
+uuid = { version = "1", features = ["v4", "serde"] }
+dirs = "5"
+chrono = { version = "0.4", features = ["serde"] }
+tauri-plugin-deep-link = "2"

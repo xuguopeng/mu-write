@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+src-tauri/target/
+
+# Local environment
+.env
+.env.*
+!.env.example
+
+# Local app/project state
+.vela/
+项目记忆.md
+public/buyme/
+*.db
+*.sqlite
+*.sqlite3
+
+# OS/editor files
+.DS_Store
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
