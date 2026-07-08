@@ -2,6 +2,8 @@
 
 爆文工坊移除了内置 AI 聊天面板，但保留章节生成、润色、知识库、MCP、模型配置等核心能力。Codex 或脚本可以通过 `plotforge-cli` 调用这些功能。
 
+给其他 AI 读取和执行的完整命令手册见 [`docs/AI_COMMANDS.md`](./AI_COMMANDS.md)。
+
 ## 构建
 
 ```bash
