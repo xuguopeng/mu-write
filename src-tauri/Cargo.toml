@@ -1,6 +1,6 @@
 [package]
 name = "plotforge"
-version = "1.0.1"
+version = "1.0.2"
 description = "为网文作者打造的 AI 连载生产工作台"
 authors = ["PlotForge Team"]
 edition = "2021"

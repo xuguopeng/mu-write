@@ -31,8 +31,9 @@ export function clearChapterTitleCache(filePath?: string) {
  * @param fallback    兜底显示名（如 "第1章"）
  * @param chapterNumber 章节号（用于定位蓝图文件）
  */
-async function readChapterTitle(filePath: string, fallback: string, chapterNumber?: number): Promise<string> {
-  if (chapterTitleCache.has(filePath)) return chapterTitleCache.get(filePath)!
+async function readChapterTitle(projectPath: string, filePath: string, fallback: string, chapterNumber?: number): Promise<string> {
+  const cacheKey = `${projectPath}::${filePath}`
+  if (chapterTitleCache.has(cacheKey)) return chapterTitleCache.get(cacheKey)!
 
   // 优先从蓝图 JSON 读取标题
   if (chapterNumber) {
@@ -42,7 +43,7 @@ async function readChapterTitle(filePath: string, fallback: string, chapterNumbe
         const bpResult = await ipc.invoke('db:blueprint-get', chapterNumber)
         if (bpResult) {
           const display = `第${chapterNumber}章 ${bpResult.title}`
-          chapterTitleCache.set(filePath, display)
+          chapterTitleCache.set(cacheKey, display)
           return display
         }
       }
@@ -64,16 +65,20 @@ async function readChapterTitle(filePath: string, fallback: string, chapterNumbe
   if (!firstLine) return fallback
   const title = firstLine.replace(/^#+\s*/, '').trim()
   const display = title || fallback
-  chapterTitleCache.set(filePath, display)
+  chapterTitleCache.set(cacheKey, display)
   return display
 }
 
 // ===== 正文章节组件 =====
 
-export default function ManuscriptGroup({ files }: { files: FileNode[]; projectPath: string }) {
+export default function ManuscriptGroup({ files, projectPath }: { files: FileNode[]; projectPath: string }) {
   const [open, setOpen] = useState(true)
   // 文件路径 → 显示名称的映射（异步加载）
   const [titleMap, setTitleMap] = useState<Record<string, string>>({})
+
+  useEffect(() => {
+    setTitleMap({})
+  }, [projectPath])
 
   // 每次 files 变化时异步读取各文件标题（命中缓存的路径直接跳过 IPC）
   const filesDep = files.map(f => f.path).join(',')
@@ -91,14 +96,14 @@ export default function ManuscriptGroup({ files }: { files: FileNode[]; projectP
           const chMatch = rawName.match(/^chapter_(\d+)$/)
           const fallback = chMatch ? `第${parseInt(chMatch[1], 10)}章` : rawName
           const chNum = chMatch ? parseInt(chMatch[1], 10) : undefined
-          entries[f.path] = await readChapterTitle(f.path, fallback, chNum)
+          entries[f.path] = await readChapterTitle(projectPath, f.path, fallback, chNum)
         })
       )
       if (!cancelled) setTitleMap(prev => ({ ...prev, ...entries }))
     }
     load()
     return () => { cancelled = true }
-  }, [files, filesDep, titleMap])
+  }, [files, filesDep, projectPath, titleMap])
 
   const getDisplay = (f: FileNode) => {
     if (titleMap[f.path]) return titleMap[f.path]
