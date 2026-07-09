@@ -41,13 +41,23 @@ export const BUILTIN_PRESETS: ProviderPreset[] = [
     embeddingModels: ['text-embedding-3-small', 'text-embedding-3-large', 'text-embedding-ada-002'],
   },
   {
+    provider: 'token-relay',
+    displayName: 'Token 中转站',
+    baseUrl: 'https://api.0029.org/v1',
+    protocol: 'openai',
+    models: [
+      { name: 'gpt-5.5', maxTokens: 65536 },
+    ],
+    embeddingModels: [],
+  },
+  {
     provider: 'deepseek',
     displayName: 'DeepSeek',
     baseUrl: 'https://api.deepseek.com/v1',
     protocol: 'openai',
     models: [
-      { name: 'deepseek-chat', maxTokens: 65536 },
-      { name: 'deepseek-reasoner', maxTokens: 65536 },
+      { name: 'deepseek-v4-flash', maxTokens: 65536 },
+      { name: 'deepseek-v4-pro', maxTokens: 65536 },
     ],
     embeddingModels: [],
   },

@@ -77,7 +77,10 @@ export const useDraftStore = create<DraftState>()((set, get) => ({
         draftsByChapter: { ...s.draftsByChapter, [chapterNumber]: metas },
       }))
     } catch {
-      // 出错或不存在时跳过
+      // 出错或不存在时清空本章缓存，避免显示上一次项目/上一次状态的旧数据。
+      set(s => ({
+        draftsByChapter: { ...s.draftsByChapter, [chapterNumber]: [] },
+      }))
     }
   },
 
@@ -108,6 +111,9 @@ export const useDraftStore = create<DraftState>()((set, get) => ({
       }
 
       set({ draftsByChapter: newDraftsByChapter })
+    } catch {
+      // 项目切换或刷新失败时也不要保留上一部小说的正文章节列表。
+      set({ draftsByChapter: {} })
     } finally {
       set({ loading: false })
     }

@@ -42,8 +42,10 @@ export default function ProjectTree() {
   // ✅ 用 getState() 获取最新的 action，不作为依赖项，避免重建导致 useEffect 循环
   const refreshAll = useCallback(async () => {
 
-    useProjectStore.getState().refreshFileTree()
-    useDraftStore.getState().loadAllDrafts()
+    await Promise.all([
+      useProjectStore.getState().refreshFileTree(),
+      useDraftStore.getState().loadAllDrafts(),
+    ])
     // 通过 Service 层获取架构状态和蓝图数量（避免直接 IPC）
     const { checkArchStatus, getBlueprintCount } = await import('../../../services/architecture-service')
     const [status, count] = await Promise.all([

@@ -1,6 +1,6 @@
 {
   "productName": "爆文工坊",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "identifier": "com.plotforge.app",
   "build": {
     "beforeDevCommand": "pnpm run dev",

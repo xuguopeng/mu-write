@@ -116,7 +116,10 @@ export const useProjectStore = create<ProjectState>()((set, get) => ({
     try {
       const result = await ipc.invoke('project:open', projectPath)
       if (result.success && result.project) {
-        set({ currentProject: result.project })
+        // 切换项目时先清掉上一部小说的草稿/正文缓存和编辑器 Tab，
+        // 避免新项目加载期间侧边栏继续显示旧项目的定稿章节。
+        await callProjectClosed()
+        set({ currentProject: result.project, fileTree: [] })
         // 加载文件树
         await get().refreshFileTree()
         // 自动展开侧边栏并切换到项目结构视图
